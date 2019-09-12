@@ -1,0 +1,29 @@
+html {
+	background-color: rgb(46,60,86);
+}
+
+body {
+	font-family: 'Lato', sans-serif;
+}
+
+#smpl {
+	color: white;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 800px;
+	height: 600px;
+	margin-top: -300px; /* Half the height */
+	margin-left: -400px; /* Half the width */
+}
+
+#time {
+	font-size: 18em;
+	line-height: 500px;
+	text-align: center;
+}
+
+#date {
+	font-size: 4em;
+	text-align: center;
+}
