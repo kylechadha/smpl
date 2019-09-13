@@ -39,7 +39,7 @@ html, body {
   font-family: 'HelveticaNeue-UltraLight', 'Helvetica Neue UltraLight', 'Helvetica Neue', 'Open-Light', sans-serif;
 }
 
-#smpl {
+#simple {
   margin-top: -50px;
   display: grid;
 }
@@ -96,4 +96,9 @@ html, body {
   /*color: #1D1A05;*/
   font-size: 2em;
   text-align: center;
+}
+
+.notransition {
+  -webkit-transition: none !important;
+  transition: none !important;
 }

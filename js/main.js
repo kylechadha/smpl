@@ -5,11 +5,10 @@
 // - Read up on em's, so you can ensure text always fits inside svg circle
 // - Make everything responsive
 // >> going to have to force an update of the circumference value as well
-// - Clean up animation
-// -- stop the animation from "catching up" when focus is restored  ... could remove transition on page visiibility off, and re-add it when restored
 
 // ** how did we do functions / JS architecture in the previous extension?
 
+// Update the clock.
 var sweep = $('#sweep');
 var circumference = parseInt(sweep.css('r'), 10) * 2 * Math.PI;
 
@@ -23,4 +22,30 @@ function update() {
 update();
 setInterval(update, 1000);
 
-console.log("Smpl: Created with <3 by Kyle Chadha");
+// Stop the transition animation when the page loses focus,
+// (so it doesn't animate the re-draw when it gains focus).
+var hidden, visibilityChange; 
+if (typeof document.hidden !== "undefined") {
+  hidden = "hidden";
+  visibilityChange = "visibilitychange";
+} else if (typeof document.webkitHidden !== "undefined") {
+  hidden = "webkitHidden";
+  visibilityChange = "webkitvisibilitychange";
+}
+
+function handleVisibilityChange() {
+  if (document[hidden]) {
+    sweep.addClass('notransition');
+  } else {
+    // Note: Without this wait the page sometimes re-draws after the transition has been added back.
+    setTimeout(function() {
+      sweep.removeClass('notransition')
+    }, 1);
+  }
+}
+
+if (!(typeof document.addEventListener === "undefined" || hidden === undefined)) {
+  document.addEventListener(visibilityChange, handleVisibilityChange, false);
+}
+
+console.log("Simple New Tab: Created with <3 by Kyle Chadha");

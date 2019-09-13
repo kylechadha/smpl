@@ -1,9 +1,9 @@
 {
-  "name": "Smpl",
+  "name": "Simple New Tab",
   "version": "1.0",
   "description": "A simple new tab page.",
   "chrome_url_overrides" : {
-    "newtab": "smpl.html"
+    "newtab": "simple.html"
   },
   "permissions": ["activeTab", "storage"],
   "background": {
