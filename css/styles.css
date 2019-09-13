@@ -39,21 +39,14 @@ html, body {
   font-family: 'HelveticaNeue-UltraLight', 'Helvetica Neue UltraLight', 'Helvetica Neue', 'Open-Light', sans-serif;
 }
 
-#main {
+#smpl {
   margin-top: -50px;
+  display: grid;
 }
 
-#seconds {
-  /* formula: circumference / divide by 60 / divide by 3 (assuming 2:1 ratio dash to gap)*/
-  stroke-dasharray: 9.052046629 18.104093258;
-}
-
-#sweep {
-  stroke-dasharray: 1602.21225333 1602.21225333; 
-  stroke-dashoffset: 1602.21225333;
-  transition: stroke-dashoffset 1s;
-  transform: rotate(-90deg);
-  transform-origin: 50% 50%;
+#clock, #dateTime {
+  grid-column: 1;
+  grid-row: 1;
 }
 
 .dial {
@@ -66,10 +59,34 @@ html, body {
   cy: 275;
 }
 
+#seconds {
+  /* formula: circumference / divide by 59 / divide by 3 (assuming 2:1 ratio dash to gap)*/
+  stroke-dasharray: 9.052046629 18.104093258;
+}
+
+#sweep {
+  stroke-dasharray: 1602.21225333 1602.21225333; 
+  stroke-dashoffset: 1602.21225333;
+  transition: stroke-dashoffset 1s;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+#dateTime {
+  margin-top: -8px;
+  height: 550px;
+  width: 550px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; 
+}
+
 #time {
+  margin-left: -10px;
   color: white;
   /*color: #1D1A05;*/
-  font-size: 12em;
+  font-size: 10em;
   line-height: 1em;
   text-align: center;
 }
@@ -77,6 +94,6 @@ html, body {
 #date {
   color: rgba(255, 255, 255, 0.5);
   /*color: #1D1A05;*/
-  font-size: 2.4em;
+  font-size: 2em;
   text-align: center;
 }

@@ -1,11 +1,12 @@
 // To Do's
-// - Add animation on load for text and date
 // - Add ability to change font sizes and colors (perhaps controlled by cursor?), could have icons bottom left
 // -- Scroll through different color themes
 // - Save preferences in local storage
 // - Read up on em's, so you can ensure text always fits inside svg circle
 // - Make everything responsive
 // >> going to have to force an update of the circumference value as well
+// - Clean up animation
+// -- stop the animation from "catching up" when focus is restored  ... could remove transition on page visiibility off, and re-add it when restored
 
 // ** how did we do functions / JS architecture in the previous extension?
 
