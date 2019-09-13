@@ -27,12 +27,7 @@ body {
   line-height: 1;
 }
 
-html {
-  height: 100%;
-  width: 100%;
-}
-
-body {
+html, body {
   height: 100%;
   width: 100%;
   background-color: rgb(46,60,86);
@@ -40,11 +35,35 @@ body {
   display: flex;
   justify-content: center;
   align-items: center; 
+  position: relative;
   font-family: 'HelveticaNeue-UltraLight', 'Helvetica Neue UltraLight', 'Helvetica Neue', 'Open-Light', sans-serif;
 }
 
 #main {
   margin-top: -50px;
+}
+
+#seconds {
+  /* formula: circumference / divide by 60 / divide by 3 (assuming 2:1 ratio dash to gap)*/
+  stroke-dasharray: 9.052046629 18.104093258;
+}
+
+#sweep {
+  stroke-dasharray: 1602.21225333 1602.21225333; 
+  stroke-dashoffset: 1602.21225333;
+  transition: stroke-dashoffset 1s;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+.dial {
+  stroke: white;
+  /*stroke: #1D1A05;*/
+  stroke-width: 10;
+  fill: transparent;
+  r: 255;
+  cx: 275;
+  cy: 275;
 }
 
 #time {
