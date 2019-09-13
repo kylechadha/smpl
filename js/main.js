@@ -22,8 +22,8 @@ function update() {
 update();
 setInterval(update, 1000);
 
-// Stop the transition animation when the page loses focus,
-// (so it doesn't animate the re-draw when it gains focus).
+// Stop the transition animation when the page loses focus.
+// This is so it doesn't animate the re-draw when it regains focus.
 var hidden, visibilityChange; 
 if (typeof document.hidden !== "undefined") {
   hidden = "hidden";
@@ -40,7 +40,7 @@ function handleVisibilityChange() {
     // Note: Without this wait the page sometimes re-draws after the transition has been added back.
     setTimeout(function() {
       sweep.removeClass('notransition')
-    }, 1);
+    }, 5);
   }
 }
 

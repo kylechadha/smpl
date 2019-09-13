@@ -47,26 +47,31 @@ html, body {
 #clock, #dateTime {
   grid-column: 1;
   grid-row: 1;
+  user-select: none;
 }
 
 .dial {
+  --radius: 280;
+  --circumference: calc(var(--radius) * 2 * 3.14159265);
+  --stroke-width: 10;
+  --radiusWithStroke: calc(var(--radius) + 2 * var(--stroke-width));
+
   stroke: white;
   /*stroke: #1D1A05;*/
-  stroke-width: 10;
+  stroke-width: var(--stroke-width);
   fill: transparent;
-  r: 255;
-  cx: 275;
-  cy: 275;
+  r: var(--radius);
+  cx: var(--radiusWithStroke);
+  cy: var(--radiusWithStroke);
 }
 
 #seconds {
-  /* formula: circumference / divide by 59 / divide by 3 (assuming 2:1 ratio dash to gap)*/
-  stroke-dasharray: 9.052046629 18.104093258;
+  stroke-dasharray: calc(var(--circumference) / 59 / 3) calc(2 * var(--circumference) / 59 / 3);
 }
 
 #sweep {
-  stroke-dasharray: 1602.21225333 1602.21225333; 
-  stroke-dashoffset: 1602.21225333;
+  stroke-dasharray: var(--circumference) var(--circumference);
+  stroke-dashoffset: var(--circumference);
   transition: stroke-dashoffset 1s;
   transform: rotate(-90deg);
   transform-origin: 50% 50%;
@@ -74,8 +79,8 @@ html, body {
 
 #dateTime {
   margin-top: -8px;
-  height: 550px;
-  width: 550px;
+  height: calc(var(--radiusWithStroke) * 2);
+  width: calc(var(--radiusWithStroke) * 2);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -83,10 +88,9 @@ html, body {
 }
 
 #time {
-  margin-left: -10px;
   color: white;
   /*color: #1D1A05;*/
-  font-size: 10em;
+  font-size: 12em;
   line-height: 1em;
   text-align: center;
 }
@@ -94,7 +98,7 @@ html, body {
 #date {
   color: rgba(255, 255, 255, 0.5);
   /*color: #1D1A05;*/
-  font-size: 2em;
+  font-size: 2.4em;
   text-align: center;
 }
 
