@@ -1,7 +1,7 @@
 function update() {
-	var now = moment()
+  var now = moment()
   $('#time').html(now.format('h:mm'));
-  $('#date').html(now.format('MM/DD/YY'));
+  $('#date').html(now.format('dddd, MMMM DD'));
 }
 
 update();
