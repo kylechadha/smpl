@@ -8,19 +8,42 @@
 
 // ** how did we do functions / JS architecture in the previous extension?
 
-// Update the clock.
 var sweep = $('#sweep');
+var clock = $('#clock');
+var time = $('#time');
+var date = $('#date');
+
+// Update the clock.
 var circumference = parseInt(sweep.css('r'), 10) * 2 * Math.PI;
 
 function update() {
   var now = moment();
-  $('#time').html(now.format('h:mm'));
-  $('#date').html(now.format('dddd, MMMM DD'));
+  time.html(now.format('h:mm'));
+  date.html(now.format('dddd, MMMM DD'));
 
   sweep.css('stroke-dashoffset', circumference*(1-(now.seconds()/59)))
 }
 update();
 setInterval(update, 1000);
+
+// Handle media queries.
+if (matchMedia) {
+  var mqLarge = window.matchMedia( "(max-width: 1440px)" );
+  mqLarge.addListener(WidthChange);
+  WidthChange(mqLarge);
+}
+
+function WidthChange(mq) {
+  if (mq.matches) {
+    clock.attr('width', '450');
+    clock.attr('height', '450');
+  } else {
+    clock.attr('width', '600');
+    clock.attr('height', '600');
+  }
+  circumference = parseInt($('#sweep').css('r'), 10) * 2 * Math.PI;
+  sweep.css('stroke-dashoffset', circumference*(1-(now.seconds()/59)))
+}
 
 // Stop the transition animation when the page loses focus.
 // This is so it doesn't animate the re-draw when it regains focus.
@@ -39,7 +62,7 @@ function handleVisibilityChange() {
   } else {
     // Note: Without this wait the page sometimes re-draws after the transition has been added back.
     setTimeout(function() {
-      sweep.removeClass('notransition')
+      sweep.removeClass('notransition');
     }, 5);
   }
 }
