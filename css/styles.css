@@ -18,7 +18,6 @@ time, mark, audio, video {
   font: inherit;
   vertical-align: baseline;
 }
-/* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
 footer, header, hgroup, menu, nav, section {
   display: block;
@@ -44,10 +43,11 @@ html, body {
   --circumference: calc(var(--radius) * 2 * 3.14159265);
   --stroke-width: 10;
   --radiusWithStroke: calc(var(--radius) + 2 * var(--stroke-width));
+  --container: calc(650px * var(--ratio));
+  /* --ratio: 1; Defined in media queries! */ 
 }
 
 #simple {
-  margin-top: -50px;
   display: grid;
 }
 
@@ -55,6 +55,8 @@ html, body {
   grid-column: 1;
   grid-row: 1;
   user-select: none;
+  height: var(--container);
+  width: var(--container);
 }
 
 .dial {
@@ -78,9 +80,7 @@ html, body {
 }
 
 #dateTime {
-  margin-top: -8px;
-  height: calc(var(--radiusWithStroke) * 2);
-  width: calc(var(--radiusWithStroke) * 2);
+  margin-top: calc(-8px * var(--ratio));
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -90,7 +90,7 @@ html, body {
 #time {
   color: white;
   /*color: #1D1A05;*/
-  font-size: 12em;
+  font-size: calc(12em * var(--ratio));
   line-height: 1em;
   text-align: center;
 }
@@ -98,7 +98,7 @@ html, body {
 #date {
   color: rgba(255, 255, 255, 0.5);
   /*color: #1D1A05;*/
-  font-size: 2.4em;
+  font-size: calc(2.4em * var(--ratio));
   text-align: center;
 }
 
@@ -107,23 +107,48 @@ html, body {
   transition: none !important;
 }
 
-@media (max-width: 1024px){
-
+@media (max-width: 7680px) {
+  :root {
+    --ratio: 4;
+  }
+}
+@media (max-width: 3840px) {
+  :root {
+    --ratio: 2;
+  }
+}
+@media (max-width: 2560px) {
+  :root {
+    --ratio: 1.33333333;
+  }
+}
+@media (max-width: 1920px) {
+  :root {
+    --ratio: 1;
+  }
+}
+@media (max-width: 1680px) {
+  :root {
+    --ratio: 0.875;
+  }
 }
 @media (max-width: 1440px) {
   :root {
-    --radius: 210;
-    --stroke-width: 7.5;
+    --ratio: 0.75;
   }
-  #simple {
-    margin-top: -37.5px;
-    display: grid;
+}
+@media (max-width: 1280px) {
+  :root {
+    --ratio: 0.66666667;
   }
-  #time {
-    font-size: 9em;
-    line-height: 0.95em;
+}
+@media (max-width: 1024px) {
+  :root {
+    --ratio: 0.53333333;
   }
-  #date {
-    font-size: 1.8em;
+}
+@media (max-width: 800px) {
+  :root {
+    --ratio: 0.41666667;
   }
 }
