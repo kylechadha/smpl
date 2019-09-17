@@ -26,18 +26,6 @@ body {
   line-height: 1;
 }
 
-html, body {
-  height: 100%;
-  width: 100%;
-  background-color: rgb(46,60,86);
-  /*background-color: #D7E8BA;*/
-  display: flex;
-  justify-content: center;
-  align-items: center; 
-  position: relative;
-  font-family: 'HelveticaNeue-UltraLight', 'Helvetica Neue UltraLight', 'Helvetica Neue', 'Open-Light', sans-serif;
-}
-
 :root {
   --radius: 280;
   --circumference: calc(var(--radius) * 2 * 3.14159265);
@@ -45,6 +33,17 @@ html, body {
   --radiusWithStroke: calc(var(--radius) + 2 * var(--stroke-width));
   --container: calc(650px * var(--ratio));
   /* --ratio: 1; Defined in media queries! */ 
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  position: relative;
+  font-family: 'HelveticaNeue-UltraLight', 'Helvetica Neue UltraLight', 'Helvetica Neue', 'Open-Light', sans-serif;
+  background-color: var(--background);
 }
 
 #simple {
@@ -60,8 +59,7 @@ html, body {
 }
 
 .dial {
-  stroke: white;
-  /*stroke: #1D1A05;*/
+  stroke: var(--foreground);
   stroke-width: var(--stroke-width);
   fill: transparent;
   r: var(--radius);
@@ -85,27 +83,85 @@ html, body {
   flex-direction: column;
   justify-content: center;
   align-items: center; 
+  color: var(--foreground);
 }
 
 #time {
-  color: white;
-  /*color: #1D1A05;*/
   font-size: calc(12em * var(--ratio));
   line-height: 1em;
   text-align: center;
 }
 
 #date {
-  color: rgba(255, 255, 255, 0.5);
-  /*color: #1D1A05;*/
   font-size: calc(2.4em * var(--ratio));
   text-align: center;
+  -webkit-filter: opacity(50%);
+  filter: opacity(50%);
 }
 
 .notransition {
   -webkit-transition: none !important;
   transition: none !important;
 }
+
+/* Themes */
+
+.biscay {
+  --background: #2E3C56;
+  --foreground: #FFFFFF;
+}
+
+.tolopea {
+  --background: #0C0032;
+  --foreground: #3500D3;
+}
+
+.night {
+  --background: #000000;
+  --foreground: #D7E8BA;
+}
+
+.jazzberry-jam {
+  --background: #950740;
+  --foreground: #FFFFFF;
+}
+
+.gin {
+  --background: #D7E8BA;
+  --foreground: #1D1A05;
+}
+
+.tory-blue {
+  --background: #374785;
+  --foreground: #A8D0E6;
+}
+
+.atomic-tangerine {
+  --background: #F4976C;
+  --foreground: #D2FDFF;
+}
+
+.ice {
+  --background: #FFFFFF;
+  --foreground: #5DA2D5;
+}
+
+.sky-blue {
+  --background: #90CCF4;
+  --foreground: #FFFFFF;
+}
+
+.periwinkle {
+  --background: #77A6F7;
+  --foreground: #FFFFFF;
+}
+
+.minimal {
+  --background: #FFFFFF;
+  --foreground: #000000;
+}
+
+/* Media Queries */
 
 @media (max-width: 7680px) {
   :root {

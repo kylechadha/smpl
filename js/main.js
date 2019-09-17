@@ -3,12 +3,14 @@
 // -- Scroll through different color themes
 // - Save preferences in local storage
 
+// Themes.
+$('body').addClass('test').removeClass('biscay');
+
+// Clock.
 var sweep = $('#sweep');
 var clock = $('#clock');
 var time = $('#time');
 var date = $('#date');
-
-// Update the clock.
 var circumference = parseInt(sweep.css('r'), 10) * 2 * Math.PI;
 
 function update() {
