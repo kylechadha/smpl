@@ -1,10 +1,36 @@
 // To Do's
-// - Add ability to change font sizes and colors (perhaps controlled by cursor?), could have icons bottom left
-// -- Scroll through different color themes
+// - Add icons to indicate keypress to choose themes
 // - Save preferences in local storage
+// - Clock slide in from top, date slide in from bottom?
 
 // Themes.
-$('body').addClass('test').removeClass('biscay');
+var themes = ['biscay', 'atomic-tangerine', 'periwinkle', 'jazzberry-jam', 'tolopea', 'gin', 'sky-blue', 'minimal', 'night'];
+var pos = 0;
+
+document.onkeydown = function(event) {
+  if (event.keyCode !== 37 && event.keyCode !== 39) {
+    return;
+  }
+
+  var current = themes[pos];
+  switch (event.keyCode) {
+    case 39:
+      if (pos === themes.length-1) {
+        pos = 0;
+      } else {
+        pos += 1;
+      }
+      break;
+    case 37:
+      if (pos === 0) {
+        pos = themes.length-1;
+      } else {
+        pos -= 1;
+      }
+      break;
+  }
+  $('body').addClass(themes[pos]).removeClass(current);
+};
 
 // Clock.
 var sweep = $('#sweep');
@@ -26,12 +52,12 @@ setInterval(update, 1000);
 // Stop the transition animation when the page loses focus.
 // This is so it doesn't animate the re-draw when it regains focus.
 var hidden, visibilityChange; 
-if (typeof document.hidden !== "undefined") {
-  hidden = "hidden";
-  visibilityChange = "visibilitychange";
-} else if (typeof document.webkitHidden !== "undefined") {
-  hidden = "webkitHidden";
-  visibilityChange = "webkitvisibilitychange";
+if (typeof document.hidden !== 'undefined') {
+  hidden = 'hidden';
+  visibilityChange = 'visibilitychange';
+} else if (typeof document.webkitHidden !== 'undefined') {
+  hidden = 'webkitHidden';
+  visibilityChange = 'webkitvisibilitychange';
 }
 
 function handleVisibilityChange() {
@@ -45,8 +71,8 @@ function handleVisibilityChange() {
   }
 }
 
-if (!(typeof document.addEventListener === "undefined" || hidden === undefined)) {
+if (!(typeof document.addEventListener === 'undefined' || hidden === undefined)) {
   document.addEventListener(visibilityChange, handleVisibilityChange, false);
 }
 
-console.log("Simple New Tab: Created with <3 by Kyle Chadha");
+console.log('Simple New Tab: Created with <3 by Kyle Chadha @kylechadha');

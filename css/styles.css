@@ -118,7 +118,7 @@ html, body {
 
 .night {
   --background: #000000;
-  --foreground: #D7E8BA;
+  --foreground: #FFFFFF;
 }
 
 .jazzberry-jam {
@@ -131,19 +131,9 @@ html, body {
   --foreground: #1D1A05;
 }
 
-.tory-blue {
-  --background: #374785;
-  --foreground: #A8D0E6;
-}
-
 .atomic-tangerine {
   --background: #F4976C;
   --foreground: #D2FDFF;
-}
-
-.ice {
-  --background: #FFFFFF;
-  --foreground: #5DA2D5;
 }
 
 .sky-blue {
