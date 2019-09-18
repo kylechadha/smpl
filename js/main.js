@@ -1,7 +1,8 @@
 // Themes.
-var themes = ['biscay', 'atomic-tangerine', 'periwinkle', 'jazzberry-jam', 'tolopea', 'gin', 'sky-blue', 'minimal', 'night'];
+var themes = ['biscay', 'periwinkle', 'atomic-tangerine', 'gin', 'interdimensional-blue', 'jazzberry-jam', 'tolopea-white', 'sky-blue', 'tolopea', 'minimal', 'night'];
 var pos = parseInt(localStorage.getItem('theme')) || 0;
 $('body').removeClass('hidden').addClass(themes[pos]);
+$('#clock').fadeTo( 1000, 1 );
 
 document.onkeyup = function(event) {
   if (event.keyCode !== 37 && event.keyCode !== 39) {
@@ -26,6 +27,7 @@ document.onkeyup = function(event) {
       break;
   }
   $('body').addClass(themes[pos]).removeClass(current);
+  $('#clock').css('opacity', 0).fadeTo( 1000, 1 );
   localStorage.setItem('theme', pos);
 };
 

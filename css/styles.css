@@ -58,6 +58,10 @@ html, body {
   width: var(--container);
 }
 
+#clock {
+  opacity: 0;
+}
+
 .dial {
   stroke: var(--foreground);
   stroke-width: var(--stroke-width);
@@ -122,7 +126,17 @@ html, body {
   --foreground: #3500D3;
 }
 
-.night {
+.tolopea-white {
+  --background: #0C0032;
+  --foreground: #FFFFFF;
+}
+
+.interdimensional-blue {
+  --background: #360CCC;
+  --foreground: #FFFFFF;
+}
+
+.minimal-night {
   --background: #000000;
   --foreground: #FFFFFF;
 }
