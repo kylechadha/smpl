@@ -1,13 +1,9 @@
-// To Do's
-// - Add icons to indicate keypress to choose themes
-// - Save preferences in local storage
-// - Clock slide in from top, date slide in from bottom?
-
 // Themes.
 var themes = ['biscay', 'atomic-tangerine', 'periwinkle', 'jazzberry-jam', 'tolopea', 'gin', 'sky-blue', 'minimal', 'night'];
-var pos = 0;
+var pos = parseInt(localStorage.getItem('theme')) || 0;
+$('body').removeClass('hidden').addClass(themes[pos]);
 
-document.onkeydown = function(event) {
+document.onkeyup = function(event) {
   if (event.keyCode !== 37 && event.keyCode !== 39) {
     return;
   }
@@ -30,6 +26,7 @@ document.onkeydown = function(event) {
       break;
   }
   $('body').addClass(themes[pos]).removeClass(current);
+  localStorage.setItem('theme', pos);
 };
 
 // Clock.

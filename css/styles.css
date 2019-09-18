@@ -106,6 +106,12 @@ html, body {
 
 /* Themes */
 
+.hidden {
+  background-color: #323639;
+  --background: #323639;
+  --foreground: #323639;
+}
+
 .biscay {
   --background: #2E3C56;
   --foreground: #FFFFFF;
