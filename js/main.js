@@ -1,5 +1,5 @@
 // Themes.
-var themes = ['biscay', 'periwinkle', 'atomic-tangerine', 'gin', 'interdimensional-blue', 'jazzberry-jam', 'tolopea-white', 'sky-blue', 'tolopea', 'minimal', 'night'];
+var themes = ['biscay', 'periwinkle', 'atomic-tangerine', 'gin', 'interdimensional-blue', 'jazzberry-jam', 'tolopea-white', 'sky-blue', 'tolopea', 'minimal', 'minimal-night'];
 var pos = parseInt(localStorage.getItem('theme')) || 0;
 $('body').removeClass('hidden').addClass(themes[pos]);
 $('#clock').fadeTo( 1000, 1 );
