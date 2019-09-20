@@ -31,7 +31,7 @@ body {
   --circumference: calc(var(--radius) * 2 * 3.14159265);
   --stroke-width: 10;
   --radiusWithStroke: calc(var(--radius) + 2 * var(--stroke-width));
-  --container: calc(650px * var(--ratio));
+  --container: calc(700px * var(--ratio));
   /* --ratio: 1; Defined in media queries! */ 
 }
 
@@ -195,26 +195,26 @@ html, body {
 }
 @media (max-width: 1680px) {
   :root {
-    --ratio: 0.875;
+    --ratio: 0.9625;
   }
 }
 @media (max-width: 1440px) {
   :root {
-    --ratio: 0.75;
+    --ratio: 0.825;
   }
 }
 @media (max-width: 1280px) {
   :root {
-    --ratio: 0.66666667;
+    --ratio: 0.75;
   }
 }
 @media (max-width: 1024px) {
   :root {
-    --ratio: 0.53333333;
+    --ratio: 0.6;
   }
 }
 @media (max-width: 800px) {
   :root {
-    --ratio: 0.41666667;
+    --ratio: 0.475;
   }
 }

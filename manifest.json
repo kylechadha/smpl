@@ -1,6 +1,6 @@
 {
   "name": "Simple New Tab",
-  "version": "1.0",
+  "version": "1.02",
   "description": "A simple new tab page.",
   "chrome_url_overrides" : {
     "newtab": "simple.html"
