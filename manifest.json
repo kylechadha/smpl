@@ -1,7 +1,8 @@
 {
   "name": "Simple New Tab",
-  "version": "1.02",
+  "version": "1.3",
   "description": "A simple new tab page.",
+  "homepage_url": "http://kylechadha.com",
   "chrome_url_overrides" : {
     "newtab": "simple.html"
   },
