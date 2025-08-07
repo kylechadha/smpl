@@ -31,7 +31,7 @@ body {
   --circumference: calc(var(--radius) * 2 * 3.14159265);
   --stroke-width: 10;
   --radiusWithStroke: calc(var(--radius) + 2 * var(--stroke-width));
-  --container: calc(700px * var(--ratio));
+  --container: min(70vh, 70vw);
   /* --ratio: 1; Defined in media queries! */ 
 }
 
@@ -82,22 +82,21 @@ html, body {
 }
 
 #dateTime {
-  margin-top: calc(-8px * var(--ratio));
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center; 
+  align-items: center;
   color: var(--foreground);
 }
 
 #time {
-  font-size: calc(12em * var(--ratio));
-  line-height: 1em;
+  font-size: calc(var(--container) * 0.25);
+  line-height: 0.9em;
   text-align: center;
 }
 
 #date {
-  font-size: calc(2.4em * var(--ratio));
+  font-size: calc(var(--container) * 0.06);
   text-align: center;
   -webkit-filter: opacity(50%);
   filter: opacity(50%);
@@ -171,50 +170,15 @@ html, body {
   --foreground: #000000;
 }
 
-/* Media Queries */
-
-@media (max-width: 7680px) {
+/* Responsive scaling for very small screens only */
+@media (max-width: 600px) {
   :root {
-    --ratio: 4;
+    --container: min(85vh, 85vw);
   }
-}
-@media (max-width: 3840px) {
-  :root {
-    --ratio: 2;
+  #time {
+    font-size: calc(var(--container) * 0.22);
   }
-}
-@media (max-width: 2560px) {
-  :root {
-    --ratio: 1.33333333;
-  }
-}
-@media (max-width: 1920px) {
-  :root {
-    --ratio: 1;
-  }
-}
-@media (max-width: 1680px) {
-  :root {
-    --ratio: 0.9625;
-  }
-}
-@media (max-width: 1440px) {
-  :root {
-    --ratio: 0.825;
-  }
-}
-@media (max-width: 1280px) {
-  :root {
-    --ratio: 0.75;
-  }
-}
-@media (max-width: 1024px) {
-  :root {
-    --ratio: 0.6;
-  }
-}
-@media (max-width: 800px) {
-  :root {
-    --ratio: 0.475;
+  #date {
+    font-size: calc(var(--container) * 0.055);
   }
 }
