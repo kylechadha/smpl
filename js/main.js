@@ -38,10 +38,49 @@ var time = $('#time');
 var date = $('#date');
 var circumference = parseInt(sweep.css('r'), 10) * 2 * Math.PI;
 
+function measureTextWidth(text, fontSize, fontFamily) {
+  var canvas = document.createElement('canvas');
+  var context = canvas.getContext('2d');
+  context.font = fontSize + 'px ' + fontFamily;
+  return context.measureText(text).width;
+}
+
+function balanceTextSizes() {
+  var container = parseFloat($('#dateTime').css('width'));
+  var timeText = time.text();
+  var dateText = date.text();
+  
+  // Base font sizes relative to container
+  var baseTimeSize = container * 0.25;
+  var baseDateSize = container * 0.045;
+  
+  // Font family for measurements
+  var fontFamily = 'system-ui, -apple-system, BlinkMacSystemFont';
+  
+  // Measure text widths at base sizes
+  var timeWidth = measureTextWidth(timeText, baseTimeSize, fontFamily);
+  var dateWidth = measureTextWidth(dateText, baseDateSize, fontFamily);
+  
+  // Target: make date width slightly wider than time for better balance
+  var targetRatio = 1.05;
+  var targetDateWidth = timeWidth * targetRatio;
+  
+  // Calculate adjusted date size
+  var dateMultiplier = targetDateWidth / dateWidth;
+  var adjustedDateSize = baseDateSize * dateMultiplier;
+  
+  // Apply dynamic sizing
+  time.css('font-size', baseTimeSize + 'px');
+  date.css('font-size', adjustedDateSize + 'px');
+}
+
 function update() {
   var now = moment();
   time.html(now.format('h:mm'));
   date.html(now.format('dddd, MMMM DD'));
+
+  // Balance the text sizes dynamically
+  balanceTextSizes();
 
   sweep.css('stroke-dashoffset', circumference*(1-(now.seconds()/59)))
 }

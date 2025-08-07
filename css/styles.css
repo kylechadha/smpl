@@ -42,8 +42,23 @@ html, body {
   justify-content: center;
   align-items: center; 
   position: relative;
-  font-family: 'HelveticaNeue-UltraLight', 'Helvetica Neue UltraLight', 'Helvetica Neue', 'Open-Light', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+  font-weight: 200;
   background-color: var(--background);
+  /* Ultra-crisp text rendering for modern displays */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Focus indicator for keyboard navigation */
+body {
+  outline: none;
+}
+
+body:focus {
+  box-shadow: inset 0 0 0 3px var(--foreground);
+  opacity: 0.8;
 }
 
 #simple {
@@ -60,6 +75,9 @@ html, body {
 
 #clock {
   opacity: 0;
+  /* Performance optimizations */
+  will-change: opacity;
+  transform: translateZ(0);
 }
 
 .dial {
@@ -78,7 +96,11 @@ html, body {
 #sweep {
   stroke-dasharray: var(--circumference) var(--circumference);
   stroke-dashoffset: var(--circumference);
-  transition: stroke-dashoffset 1s;
+  transition: stroke-dashoffset 1s cubic-bezier(0.4, 0.0, 0.2, 1);
+  /* Performance optimizations for ultra-smooth animation */
+  will-change: stroke-dashoffset;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 #dateTime {
@@ -90,13 +112,11 @@ html, body {
 }
 
 #time {
-  font-size: calc(var(--container) * 0.25);
   line-height: 0.9em;
   text-align: center;
 }
 
 #date {
-  font-size: calc(var(--container) * 0.06);
   text-align: center;
   -webkit-filter: opacity(50%);
   filter: opacity(50%);

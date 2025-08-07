@@ -4,17 +4,17 @@
     <link rel="stylesheet" href="css/styles.css">
     <title>New Tab | Simple</title>
   </head>
-  <body class="hidden">
+  <body class="hidden" tabindex="0" role="application" aria-label="Simple clock interface. Use left and right arrow keys to change themes.">
     <div id="simple">
       <div id="clock">
-        <svg viewBox="0 0 600 600" transform='rotate(-90)'>
+        <svg viewBox="0 0 600 600" transform='rotate(-90)' role="img" aria-label="Clock with seconds sweep animation">
           <circle id="seconds" class="dial" />
           <circle id="sweep" class="dial" />
         </svg>
       </div>
-      <div id="dateTime">
-        <h1 id="time"></h1>
-        <h2 id="date"></h2>
+      <div id="dateTime" role="timer" aria-live="polite" aria-label="Current time and date">
+        <h1 id="time" aria-label="Current time"></h1>
+        <h2 id="date" aria-label="Current date"></h2>
       </div>
     </div>
 
