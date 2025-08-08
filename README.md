@@ -4,18 +4,22 @@ A minimalist Chrome browser extension that replaces your new tab page with a cle
 
 ## Features
 
-- **Animated Clock**: SVG-based circular clock with smooth seconds sweep animation
-- **11 Color Themes**: Navigate themes with left/right arrow keys
+- **4 Unique Visualizations**: Multiple clock styles and visual effects (up/down arrow keys)
+- **11 Color Themes**: Navigate themes with left/right arrow keys  
 - **Dynamic Text Sizing**: Automatically balances time and date text for optimal visual weight
+- **Zero Dependencies**: Pure vanilla JavaScript with native APIs
 - **Responsive Design**: Adapts to all screen sizes from mobile to ultrawide monitors
 - **Accessibility**: Full keyboard navigation and screen reader support
 - **Performance Optimized**: Hardware-accelerated animations and modern rendering
 
-## Themes
+## Navigation
 
-Cycle through 11 beautiful color themes using the left and right arrow keys:
+**Themes** (Left/Right arrows): 11 beautiful color schemes
 - Biscay, Periwinkle, Atomic Tangerine, Gin, Interdimensional Blue
 - Jazzberry Jam, Tolopea White, Sky Blue, Tolopea, Minimal, Minimal Night
+
+**Visualizations** (Up/Down arrows): 4 unique clock styles
+- Classic, Rings, Dots, Smooth
 
 ## Development
 

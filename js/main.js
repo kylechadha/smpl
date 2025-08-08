@@ -1,39 +1,73 @@
 // Themes.
 var themes = ['biscay', 'periwinkle', 'atomic-tangerine', 'gin', 'interdimensional-blue', 'jazzberry-jam', 'tolopea-white', 'sky-blue', 'tolopea', 'minimal', 'minimal-night'];
 var pos = parseInt(localStorage.getItem('theme')) || 0;
+
+// Visualizations.
+var visualizations = [
+  'classic',
+  'rings', 
+  'dots',
+  'smooth'
+];
+var vizPos = parseInt(localStorage.getItem('visualization')) || 0;
 document.body.classList.remove('hidden');
 document.body.classList.add(themes[pos]);
-document.getElementById('clock').style.opacity = 1;
+// Restore page load animation for both clock and dateTime
+var clock = document.getElementById('clock');
+var dateTime = document.getElementById('dateTime');
+clock.style.opacity = 0;
+clock.style.transition = 'opacity 1s';
+dateTime.style.transition = 'opacity 1s';
+setTimeout(function() { 
+  clock.style.opacity = 1;
+  dateTime.style.opacity = 1;
+}, 100);
 
-document.onkeyup = function(event) {
-  if (event.keyCode !== 37 && event.keyCode !== 39) {
+// Initialize visualization (without showing name on startup)
+var clockElement = document.getElementById('clock');
+clockElement.className = '';
+clockElement.classList.add('viz-' + visualizations[vizPos]);
+updateClockStructure(visualizations[vizPos]);
+
+document.onkeydown = function(event) {
+  if (event.keyCode !== 37 && event.keyCode !== 39 && event.keyCode !== 38 && event.keyCode !== 40) {
     return;
   }
 
-  var current = themes[pos];
-  switch (event.keyCode) {
-    case 39:
-      if (pos === themes.length-1) {
-        pos = 0;
-      } else {
-        pos += 1;
-      }
-      break;
-    case 37:
-      if (pos === 0) {
-        pos = themes.length-1;
-      } else {
-        pos -= 1;
-      }
-      break;
-  }
-  document.body.classList.add(themes[pos]);
-  document.body.classList.remove(current);
   var clock = document.getElementById('clock');
-  clock.style.opacity = 0;
-  clock.style.transition = 'opacity 1s';
-  setTimeout(function() { clock.style.opacity = 1; }, 10);
-  localStorage.setItem('theme', pos);
+  
+  // Theme switching (left/right arrows)
+  if (event.keyCode === 37 || event.keyCode === 39) {
+    var current = themes[pos];
+    switch (event.keyCode) {
+      case 39: // Right arrow
+        pos = pos === themes.length-1 ? 0 : pos + 1;
+        break;
+      case 37: // Left arrow
+        pos = pos === 0 ? themes.length-1 : pos - 1;
+        break;
+    }
+    document.body.classList.add(themes[pos]);
+    document.body.classList.remove(current);
+    localStorage.setItem('theme', pos);
+    
+    // Show theme name
+    showThemeName(themes[pos]);
+  }
+  
+  // Visualization switching (up/down arrows)
+  if (event.keyCode === 38 || event.keyCode === 40) {
+    switch (event.keyCode) {
+      case 38: // Up arrow
+        vizPos = vizPos === visualizations.length-1 ? 0 : vizPos + 1;
+        break;
+      case 40: // Down arrow
+        vizPos = vizPos === 0 ? visualizations.length-1 : vizPos - 1;
+        break;
+    }
+    setVisualization(visualizations[vizPos]);
+    localStorage.setItem('visualization', vizPos);
+  }
 };
 
 // Clock.
@@ -42,6 +76,170 @@ var clock = document.getElementById('clock');
 var time = document.getElementById('time');
 var date = document.getElementById('date');
 var circumference = 280 * 2 * Math.PI; // Using CSS --radius: 280
+
+// Visualization system
+function setVisualization(vizType) {
+  // Remove all visualization classes
+  var clockElement = document.getElementById('clock');
+  clockElement.className = '';
+  
+  // Add new visualization class
+  clockElement.classList.add('viz-' + vizType);
+  
+  // Update clock structure if needed
+  updateClockStructure(vizType);
+  
+  // Initialize entry animation - all visualizations start at 0 and sweep into place
+  setTimeout(function() {
+    var now = new Date();
+    var seconds = now.getSeconds();
+    var minutes = now.getMinutes();
+    
+    if (vizType === 'smooth') {
+      setTimeout(function() {
+        var sweepElement = document.getElementById('sweep');
+        if (sweepElement) {
+          // Start at position 0 (full offset = no visible sweep)
+          sweepElement.style.strokeDashoffset = circumference;
+          sweepElement.style.transition = 'stroke-dashoffset 1s cubic-bezier(0.4, 0.0, 0.2, 1)';
+          
+          // Animate to current position after a small delay
+          setTimeout(function() {
+            var currentTime = new Date();
+            var currentSeconds = currentTime.getSeconds();
+            var currentMilliseconds = currentTime.getMilliseconds();
+            var smoothSeconds = currentSeconds + (currentMilliseconds / 1000);
+            sweepElement.style.strokeDashoffset = circumference * (1 - (smoothSeconds / 60));
+            
+            // Store minute for unwind detection
+            sweepElement.dataset.prevMinute = Math.floor(currentTime.getTime() / 60000);
+            
+            // After animation completes, disable transitions for smooth mode
+            setTimeout(function() {
+              sweepElement.style.transition = 'none';
+            }, 1000);
+          }, 100);
+        }
+      }, 50);
+    }
+    
+    if (vizType === 'dots') {
+      // No entry animation or initial state setup needed
+      // updateGranularDots will be called immediately by the main update loop
+    }
+  }, 10);
+  
+  // Show visualization name
+  showVisualizationName(vizType);
+}
+
+function showVisualizationName(vizType) {
+  var indicator = document.getElementById('viz-indicator');
+  var displayNames = {
+    'classic': 'Classic',
+    'rings': 'Rings',
+    'dots': 'Dots',
+    'smooth': 'Smooth'
+  };
+  
+  if (indicator) {
+    indicator.textContent = displayNames[vizType] || vizType;
+    indicator.classList.add('show');
+    
+    // Clear any existing timeout
+    if (indicator.hideTimeout) {
+      clearTimeout(indicator.hideTimeout);
+    }
+    
+    // Hide after 2 seconds from the last switch
+    indicator.hideTimeout = setTimeout(function() {
+      indicator.classList.remove('show');
+    }, 2000);
+  }
+}
+
+function showThemeName(themeName) {
+  var indicator = document.getElementById('viz-indicator');
+  var themeNames = {
+    'biscay': 'Biscay',
+    'periwinkle': 'Periwinkle', 
+    'atomic-tangerine': 'Tangerine',
+    'gin': 'Gin',
+    'interdimensional-blue': 'Cosmic',
+    'jazzberry-jam': 'Berry',
+    'tolopea-white': 'Violet',
+    'sky-blue': 'Sky',
+    'tolopea': 'Purple',
+    'minimal': 'Light',
+    'minimal-night': 'Dark'
+  };
+  
+  if (indicator) {
+    indicator.textContent = themeNames[themeName] || themeName;
+    indicator.classList.add('show');
+    
+    // Clear any existing timeout
+    if (indicator.hideTimeout) {
+      clearTimeout(indicator.hideTimeout);
+    }
+    
+    // Hide after 2 seconds from the last switch
+    indicator.hideTimeout = setTimeout(function() {
+      indicator.classList.remove('show');
+    }, 2000);
+  }
+}
+
+function updateClockStructure(vizType) {
+  var clockDiv = document.getElementById('clock');
+  
+  switch(vizType) {
+    case 'rings':
+      clockDiv.innerHTML = `
+        <svg viewBox="0 0 600 600" transform='rotate(-90)' role="img" aria-label="Dual ring clock with minutes and seconds">
+          <circle id="minute-ring" class="dial minute-dial" />
+          <circle id="second-ring" class="dial second-dial" />
+          <circle id="minute-sweep" class="dial minute-sweep" />
+          <circle id="second-sweep" class="dial second-sweep" />
+        </svg>`;
+      break;
+    case 'dots':
+      clockDiv.innerHTML = `
+        <svg viewBox="0 0 600 600" transform='rotate(-90)' role="img" aria-label="Dot clock">
+          <g id="hour-dots"></g>
+          <g id="minute-dots"></g>
+        </svg>`;
+      createGranularDots();
+      break;
+    case 'smooth':
+      clockDiv.innerHTML = `
+        <svg viewBox="0 0 600 600" transform='rotate(-90)' role="img" aria-label="Smooth sweep clock">
+          <g id="smooth-trail"></g>
+          <circle id="sweep" class="dial" />
+        </svg>`;
+      createSmoothTrail();
+      break;
+    case 'classic':
+      clockDiv.innerHTML = `
+        <svg viewBox="0 0 600 600" transform='rotate(-90)' role="img" aria-label="Classic clock with seconds sweep animation">
+          <g id="second-markers"></g>
+          <circle id="sweep" class="dial" />
+        </svg>`;
+      createSecondMarkers();
+      break;
+    default:
+      // Classic sweep
+      clockDiv.innerHTML = `
+        <svg viewBox="0 0 600 600" transform='rotate(-90)' role="img" aria-label="Clock with seconds sweep animation">
+          <circle id="seconds" class="dial" />
+          <circle id="sweep" class="dial" />
+        </svg>`;
+      break;
+  }
+  
+  // Re-reference elements after DOM change
+  sweep = document.getElementById('sweep');
+}
 
 function measureTextWidth(text, fontSize, fontFamily) {
   var canvas = document.createElement('canvas');
@@ -85,6 +283,7 @@ function update() {
   // Format time (h:mm)
   var hours = now.getHours();
   var minutes = now.getMinutes();
+  var seconds = now.getSeconds();
   hours = hours === 0 ? 12 : hours > 12 ? hours - 12 : hours;
   time.textContent = hours + ':' + (minutes < 10 ? '0' + minutes : minutes);
   
@@ -95,10 +294,42 @@ function update() {
   // Balance the text sizes dynamically
   balanceTextSizes();
 
-  sweep.style.strokeDashoffset = circumference*(1-(now.getSeconds()/59));
+  // Update visualization based on current type
+  updateVisualization(now, hours, minutes, seconds);
+}
+
+function updateVisualization(now, hours, minutes, seconds) {
+  var currentViz = visualizations[vizPos];
+  
+  switch(currentViz) {
+    case 'classic':
+      updateClassicSweep(seconds);
+      break;
+    case 'rings':
+      updateDualRings(seconds, minutes);
+      break;
+    case 'dots':
+      updateGranularDots(seconds, minutes, hours);
+      break;
+    case 'smooth':
+      updateSmoothSweep(seconds);
+      break;
+    default:
+      updateClassicSweep(seconds);
+      break;
+  }
 }
 update();
 setInterval(update, 1000);
+
+// Smooth sweep needs higher frequency updates
+setInterval(function() {
+  if (visualizations[vizPos] === 'smooth') {
+    var now = new Date();
+    var seconds = now.getSeconds();
+    updateSmoothSweep(seconds);
+  }
+}, 16); // Update ~60 times per second for ultra smoothness
 
 // Stop the transition animation when the page loses focus.
 // This is so it doesn't animate the re-draw when it regains focus.
@@ -125,5 +356,179 @@ function handleVisibilityChange() {
 if (!(typeof document.addEventListener === 'undefined' || hidden === undefined)) {
   document.addEventListener(visibilityChange, handleVisibilityChange, false);
 }
+
+// High-quality visualization functions
+function updateClassicSweep(seconds) {
+  if (sweep) {
+    // Each second marker is 1/60th of the circle apart
+    // At second 0: cover marker 0, at second 1: cover markers 0-1, etc.
+    // Add extra coverage to ensure we fully cover each marker
+    var markerAdvancement = (circumference / 60) * (seconds + 1.3); // +0.5 to extend past current marker
+    sweep.style.strokeDashoffset = circumference - markerAdvancement;
+  }
+}
+
+function updateDualRings(seconds, minutes) {
+  var minuteSweep = document.getElementById('minute-sweep');
+  var secondSweep = document.getElementById('second-sweep');
+  
+  if (minuteSweep && secondSweep) {
+    // Outer ring: minutes (0-60)
+    var minuteProgress = minutes / 60;
+    minuteSweep.style.strokeDashoffset = (circumference * 1.02) * (1 - minuteProgress);
+    
+    // Inner ring: seconds (0-60) 
+    var secondProgress = seconds / 60;
+    secondSweep.style.strokeDashoffset = (circumference * 0.95) * (1 - secondProgress);
+  }
+}
+
+function createGranularDots() {
+  var hourDots = document.getElementById('hour-dots');
+  var minuteDots = document.getElementById('minute-dots');
+  
+  if (hourDots && minuteDots) {
+    // Create 60 second dots (outer circle)
+    for (var i = 0; i < 60; i++) {
+      var angle = (i * 6) * Math.PI / 180;
+      var x = 300 + 280 * Math.cos(angle);
+      var y = 300 + 280 * Math.sin(angle);
+      
+      var dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      dot.setAttribute('cx', x);
+      dot.setAttribute('cy', y);
+      dot.setAttribute('r', '2.5');
+      dot.setAttribute('fill', 'var(--foreground)');
+      dot.setAttribute('opacity', '0.2');
+      dot.setAttribute('id', 'second-dot-' + i);
+      hourDots.appendChild(dot);
+    }
+    
+    // Create 12 five-minute marker dots (inner circle)
+    for (var i = 0; i < 12; i++) {
+      var angle = (i * 30) * Math.PI / 180;
+      var x = 300 + 250 * Math.cos(angle);
+      var y = 300 + 250 * Math.sin(angle);
+      
+      var dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      dot.setAttribute('cx', x);
+      dot.setAttribute('cy', y);
+      dot.setAttribute('r', '6');
+      dot.setAttribute('fill', 'var(--foreground)');
+      dot.setAttribute('opacity', '0.3');
+      dot.setAttribute('id', 'minute-marker-' + (i * 5));
+      minuteDots.appendChild(dot);
+    }
+  }
+}
+
+function updateGranularDots(seconds, minutes, hours) {
+  // Update second dots (outer circle) with dimming trail effect
+  for (var i = 0; i < 60; i++) {
+    var secondDot = document.getElementById('second-dot-' + i);
+    if (secondDot) {
+      // Calculate distance from current second, handling wrap-around
+      var distanceFromCurrent;
+      if (i <= seconds) {
+        // Normal case: dot is behind current second
+        distanceFromCurrent = seconds - i;
+      } else {
+        // Wrap-around case: dot is from previous minute
+        // For example: if seconds=5 and i=58, distance = 5 + (60-58) = 7
+        distanceFromCurrent = seconds + (60 - i);
+      }
+      
+      // Only light up dots that are within the trail (45 seconds back = 3/4 circle)
+      if (distanceFromCurrent <= 45) {
+        // Create dimming effect: full opacity at current second, 
+        // gradually dimming to 0.2 (unselected opacity) as we go back
+        var opacity;
+        if (distanceFromCurrent === 0) {
+          opacity = '1'; // Current second is full brightness
+        } else {
+          // Linear fade from 1.0 to 0.2 over 45 seconds
+          var fadeRatio = distanceFromCurrent / 45;
+          opacity = Math.max(0.2, 1 - (fadeRatio * 0.8)).toString();
+        }
+        
+        secondDot.setAttribute('opacity', opacity);
+        secondDot.setAttribute('fill', 'var(--foreground)');
+      } else {
+        secondDot.setAttribute('opacity', '0.2');
+      }
+    }
+  }
+  
+  // Update five-minute markers (inner circle) - always stay in correct state
+  for (var i = 0; i < 12; i++) {
+    var markerMinute = i * 5;
+    var marker = document.getElementById('minute-marker-' + markerMinute);
+    if (marker) {
+      if (minutes >= markerMinute) {
+        marker.setAttribute('opacity', '1');
+        marker.setAttribute('fill', 'var(--foreground)');
+      } else {
+        marker.setAttribute('opacity', '0.3');
+      }
+    }
+  }
+}
+
+function createSecondMarkers() {
+  var markers = document.getElementById('second-markers');
+  
+  if (markers) {
+    // Create all 60 second markers (0-59) including one at 12 o'clock
+    for (var i = 0; i < 60; i++) {
+      var angle = (i * 6) * Math.PI / 180;
+      var x = 300 + 280 * Math.cos(angle);
+      var y = 300 + 280 * Math.sin(angle);
+      
+      var marker = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      marker.setAttribute('x', -5); // Position relative to center  
+      marker.setAttribute('y', 0); // Position so marker extends toward center
+      marker.setAttribute('width', '10'); // Same width as sweep line
+      marker.setAttribute('height', '10'); // Square marker
+      marker.setAttribute('fill', 'var(--foreground)');
+      marker.setAttribute('opacity', '0.3');
+      marker.setAttribute('transform', 'translate(' + x + ',' + y + ') rotate(' + (i * 6) + ')');
+      markers.appendChild(marker);
+    }
+  }
+}
+
+function createSmoothTrail() {
+  // Simple approach - keep it basic like other visualizations
+  // No comet trail for now, just clean smooth sweep
+}
+
+function updateSmoothSweep(seconds) {
+  if (sweep) {
+    var now = new Date();
+    var milliseconds = now.getMilliseconds();
+    var smoothSeconds = seconds + (milliseconds / 1000);
+    
+    // Handle minute transition (similar to classic sweep)
+    var currentMinute = Math.floor(now.getTime() / 60000);
+    var prevMinute = parseFloat(sweep.dataset.prevMinute) || currentMinute;
+    
+    if (currentMinute !== prevMinute) {
+      // New minute - trigger unwind animation like classic
+      sweep.style.transition = 'stroke-dashoffset 1s cubic-bezier(0.4, 0.0, 0.2, 1)';
+      sweep.style.strokeDashoffset = '0';
+      setTimeout(function() {
+        sweep.style.transition = 'none';
+        sweep.style.strokeDashoffset = circumference;
+      }, 50);
+      sweep.dataset.prevMinute = currentMinute;
+    } else {
+      // Normal smooth update - keep it simple
+      sweep.style.strokeDashoffset = circumference * (1 - (smoothSeconds / 60));
+      sweep.style.transition = 'none';
+    }
+  }
+}
+
+
 
 console.log('Simple New Tab: Created with <3 by Kyle Chadha @kylechadha');
