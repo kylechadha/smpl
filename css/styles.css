@@ -108,7 +108,7 @@ body {
   --circumference: calc(var(--radius) * 2 * 3.14159265);
   --stroke-width: 10;
   --radiusWithStroke: calc(var(--radius) + 2 * var(--stroke-width));
-  --container: min(70vh, 70vw);
+  --container: min(63vh, 63vw);
   /* --ratio: 1; Defined in media queries! */
 }
 
@@ -123,7 +123,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui,
     sans-serif;
   font-weight: 200;
-  background-color: var(--background);
+  background: var(--background);
   /* Ultra-crisp text rendering for modern displays */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -134,7 +134,7 @@ body {
   outline: none;
 }
 
-#simple {
+#smpl {
   display: grid;
 }
 
@@ -211,65 +211,52 @@ body {
   --foreground: #323639;
 }
 
+.sky-blue {
+  --background: linear-gradient(135deg, #90ccf4 0%, #a8d5f7 100%);
+  --background-solid: #90ccf4;
+  --foreground: #ffffff;
+}
+
 .biscay {
-  --background: #2e3c56;
+  --background: linear-gradient(135deg, #2e3c56 0%, #364564 100%);
+  --background-solid: #2e3c56;
   --foreground: #ffffff;
 }
 
-.tolopea {
-  --background: #0c0032;
-  --foreground: #3500d3;
-}
-
-.tolopea-white {
-  --background: #0c0032;
-  --foreground: #ffffff;
-}
-
-.interdimensional-blue {
-  --background: #360ccc;
-  --foreground: #ffffff;
-}
-
-.minimal-night {
-  --background: #000000;
-  --foreground: #ffffff;
-}
-
-.jazzberry-jam {
-  --background: #950740;
+.tangerine {
+  --background: linear-gradient(135deg, #f4976c 0%, #f7a882 100%);
+  --background-solid: #f4976c;
   --foreground: #ffffff;
 }
 
 .gin {
   --background: #d7e8ba;
-  --foreground: #1d1a05;
+  --background-solid: #d7e8ba;
+  --foreground: #2d2a15;
 }
 
-.atomic-tangerine {
-  --background: #f4976c;
-  --foreground: #d2fdff;
-}
-
-.sky-blue {
-  --background: #90ccf4;
+.slate {
+  --background: #64748b;
+  --background-solid: #64748b;
   --foreground: #ffffff;
 }
 
-.periwinkle {
-  --background: #77a6f7;
-  --foreground: #ffffff;
+.charcoal {
+  --background: #1e293b;
+  --background-solid: #1e293b;
+  --foreground: #e2e8f0;
 }
 
-.minimal {
-  --background: #ffffff;
-  --foreground: #000000;
+.frost {
+  --background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+  --background-solid: #f8fafc;
+  --foreground: #475569;
 }
 
 /* Responsive scaling for very small screens only */
 @media (max-width: 600px) {
   :root {
-    --container: min(85vh, 85vw);
+    --container: min(77vh, 77vw);
   }
   #time {
     font-size: calc(var(--container) * 0.22);
@@ -374,4 +361,235 @@ body {
 
 .viz-dots #minute-dots circle {
   r: 4;
+}
+
+/* Settings UI */
+#settings-gear {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--foreground);
+  opacity: 0.6;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  padding: 16px;
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#settings-gear:hover {
+  opacity: 1;
+  transform: rotate(90deg);
+}
+
+#settings-gear:focus {
+  outline: none;
+}
+
+#settings-gear svg {
+  width: 32px;
+  height: 32px;
+}
+
+.settings-modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(15px);
+  z-index: 2000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.settings-modal.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.settings-content {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 320px;
+  max-width: 90vw;
+  background: var(--background-solid);
+  color: var(--foreground);
+  padding: 30px 30px 0 30px;
+  overflow-y: auto;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: -5px 0 20px rgba(0, 0, 0, 0.3);
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-modal.open .settings-content {
+  transform: translateX(0);
+}
+
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--foreground);
+  opacity: 0.3;
+}
+
+.settings-header h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  opacity: 1;
+}
+
+#settings-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--foreground);
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+  padding: 4px;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#settings-close:hover {
+  opacity: 1;
+  background: var(--foreground);
+  color: var(--background-solid);
+}
+
+.settings-section {
+  margin-bottom: 40px;
+}
+
+.settings-section h3 {
+  margin: 0 0 15px 0;
+  font-size: 16px;
+  font-weight: 400;
+  opacity: 0.6;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.option-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.option-button {
+  background: none;
+  border: 1px solid var(--foreground);
+  color: var(--foreground);
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: left;
+  transition: all 0.2s ease;
+  border-radius: 12px;
+  opacity: 0.6;
+  font-family: inherit;
+  font-weight: 500;
+}
+
+.option-button:hover {
+  opacity: 0.8;
+  background: var(--foreground);
+  color: var(--background-solid);
+}
+
+.option-button.selected {
+  opacity: 1;
+  background: var(--foreground);
+  color: var(--background-solid);
+  font-weight: 500;
+}
+
+.option-button:focus {
+  outline: 2px solid var(--foreground);
+  outline-offset: 2px;
+}
+
+.key-hint {
+  display: flex;
+  gap: 4px;
+  opacity: 0.7;
+  align-items: center;
+}
+
+.key-hint::before {
+  content: "•";
+  opacity: 0.4;
+  margin: 0 8px 0 10px;
+  font-size: 12px;
+}
+
+.key-icon {
+  width: 26px;
+  height: 30px;
+}
+
+.settings-footer {
+  margin-top: auto;
+  padding: 20px 0 30px 0;
+  border-top: 1px solid var(--foreground);
+  opacity: 0.4;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.settings-footer a {
+  color: var(--foreground);
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.settings-footer a:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .settings-content {
+    width: 280px;
+  }
+  
+  #settings-gear {
+    top: 15px;
+    right: 15px;
+    width: 50px;
+    height: 50px;
+  }
+  
+  #settings-gear svg {
+    width: 24px;
+    height: 24px;
+  }
 }

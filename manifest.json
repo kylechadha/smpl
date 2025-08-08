@@ -1,7 +1,7 @@
 {
-  "name": "Simple New Tab",
+  "name": "Smpl New Tab",
   "version": "2.0",
-  "description": "A simple new tab page.",
+  "description": "A minimalist new tab page.",
   "homepage_url": "http://kylechadha.com",
   "chrome_url_overrides" : {
     "newtab": "simple.html"

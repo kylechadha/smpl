@@ -1,7 +1,7 @@
 {
-  "name": "simple-new-tab",
+  "name": "smpl-new-tab",
   "version": "2.0.0",
-  "description": "A simple new tab page Chrome extension",
+  "description": "A minimalist new tab page Chrome extension",
   "private": true,
   "scripts": {
     "dev": "live-server --port=8000 --open=simple.html",

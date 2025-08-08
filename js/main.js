@@ -1,5 +1,5 @@
 // Themes.
-var themes = ['biscay', 'periwinkle', 'atomic-tangerine', 'gin', 'interdimensional-blue', 'jazzberry-jam', 'tolopea-white', 'sky-blue', 'tolopea', 'minimal', 'minimal-night'];
+var themes = ['sky-blue', 'biscay', 'tangerine', 'gin', 'slate', 'charcoal', 'frost'];
 var pos = parseInt(localStorage.getItem('theme')) || 0;
 
 // Visualizations.
@@ -51,6 +51,9 @@ document.onkeydown = function(event) {
     document.body.classList.remove(current);
     localStorage.setItem('theme', pos);
     
+    // Update modal UI if open
+    updateThemeSelectionInModal();
+    
     // Show theme name
     showThemeName(themes[pos]);
   }
@@ -67,6 +70,9 @@ document.onkeydown = function(event) {
     }
     setVisualization(visualizations[vizPos]);
     localStorage.setItem('visualization', vizPos);
+    
+    // Update modal UI if open
+    updateVisualizationSelectionInModal();
   }
 };
 
@@ -161,17 +167,13 @@ function showVisualizationName(vizType) {
 function showThemeName(themeName) {
   var indicator = document.getElementById('viz-indicator');
   var themeNames = {
-    'biscay': 'Biscay',
-    'periwinkle': 'Periwinkle', 
-    'atomic-tangerine': 'Tangerine',
-    'gin': 'Gin',
-    'interdimensional-blue': 'Cosmic',
-    'jazzberry-jam': 'Berry',
-    'tolopea-white': 'Violet',
     'sky-blue': 'Sky',
-    'tolopea': 'Purple',
-    'minimal': 'Light',
-    'minimal-night': 'Dark'
+    'biscay': 'Biscay',
+    'tangerine': 'Tangerine',
+    'gin': 'Gin',
+    'slate': 'Slate',
+    'charcoal': 'Charcoal',
+    'frost': 'Frost'
   };
   
   if (indicator) {
@@ -295,10 +297,10 @@ function update() {
   balanceTextSizes();
 
   // Update visualization based on current type
-  updateVisualization(now, hours, minutes, seconds);
+  updateVisualization(minutes, seconds);
 }
 
-function updateVisualization(now, hours, minutes, seconds) {
+function updateVisualization(minutes, seconds) {
   var currentViz = visualizations[vizPos];
   
   switch(currentViz) {
@@ -309,7 +311,7 @@ function updateVisualization(now, hours, minutes, seconds) {
       updateDualRings(seconds, minutes);
       break;
     case 'dots':
-      updateGranularDots(seconds, minutes, hours);
+      updateGranularDots(seconds, minutes);
       break;
     case 'smooth':
       updateSmoothSweep(seconds);
@@ -343,18 +345,16 @@ if (typeof document.hidden !== 'undefined') {
 }
 
 function handleVisibilityChange() {
-  if (document[hidden]) {
-    sweep.classList.add('notransition');
-  } else {
-    // Note: Without this wait the page sometimes re-draws after the transition has been added back.
-    setTimeout(function() {
-      sweep.classList.remove('notransition');
-    }, 10);
+  if (sweep) {
+    if (document[hidden]) {
+      sweep.classList.add('notransition');
+    } else {
+      // Note: Without this wait the page sometimes re-draws after the transition has been added back.
+      setTimeout(function() {
+        sweep.classList.remove('notransition');
+      }, 10);
+    }
   }
-}
-
-if (!(typeof document.addEventListener === 'undefined' || hidden === undefined)) {
-  document.addEventListener(visibilityChange, handleVisibilityChange, false);
 }
 
 // High-quality visualization functions
@@ -422,7 +422,7 @@ function createGranularDots() {
   }
 }
 
-function updateGranularDots(seconds, minutes, hours) {
+function updateGranularDots(seconds, minutes) {
   // Update second dots (outer circle) with dimming trail effect
   for (var i = 0; i < 60; i++) {
     var secondDot = document.getElementById('second-dot-' + i);
@@ -531,4 +531,180 @@ function updateSmoothSweep(seconds) {
 
 
 
-console.log('Simple New Tab: Created with <3 by Kyle Chadha @kylechadha');
+// Global functions for updating modal selections
+function updateThemeSelectionInModal() {
+  var themeOptions = document.getElementById('theme-options');
+  if (themeOptions) {
+    var themeButtons = themeOptions.querySelectorAll('.option-button');
+    themeButtons.forEach(function(button, index) {
+      if (index === pos) {
+        button.classList.add('selected');
+      } else {
+        button.classList.remove('selected');
+      }
+    });
+  }
+}
+
+function updateVisualizationSelectionInModal() {
+  var visualizationOptions = document.getElementById('visualization-options');
+  if (visualizationOptions) {
+    var vizButtons = visualizationOptions.querySelectorAll('.option-button');
+    vizButtons.forEach(function(button, index) {
+      if (index === vizPos) {
+        button.classList.add('selected');
+      } else {
+        button.classList.remove('selected');
+      }
+    });
+  }
+}
+
+// Settings Modal functionality
+function initializeSettings() {
+  var settingsGear = document.getElementById('settings-gear');
+  var settingsModal = document.getElementById('settings-modal');
+  var settingsClose = document.getElementById('settings-close');
+  var themeOptions = document.getElementById('theme-options');
+  var visualizationOptions = document.getElementById('visualization-options');
+  
+  // Theme display names
+  var themeNames = {
+    'sky-blue': 'Sky',
+    'biscay': 'Biscay',
+    'tangerine': 'Tangerine',
+    'gin': 'Gin',
+    'slate': 'Slate',
+    'charcoal': 'Charcoal',
+    'frost': 'Frost'
+  };
+  
+  // Populate theme options
+  themes.forEach(function(theme, index) {
+    var button = document.createElement('button');
+    button.className = 'option-button';
+    button.textContent = themeNames[theme] || theme;
+    button.setAttribute('data-theme', theme);
+    button.setAttribute('data-index', index);
+    if (index === pos) {
+      button.classList.add('selected');
+    }
+    
+    button.addEventListener('click', function() {
+      // Update theme selection
+      pos = index;
+      setTheme(theme);
+      localStorage.setItem('theme', pos);
+      
+      // Update UI
+      updateThemeSelection();
+      // Don't close modal - let user continue exploring
+    });
+    
+    themeOptions.appendChild(button);
+  });
+  
+  // Populate visualization options
+  visualizations.forEach(function(viz, index) {
+    var button = document.createElement('button');
+    button.className = 'option-button';
+    var displayNames = {
+      'classic': 'Classic',
+      'rings': 'Rings',
+      'dots': 'Dots',
+      'smooth': 'Smooth'
+    };
+    button.textContent = displayNames[viz] || viz;
+    button.setAttribute('data-viz', viz);
+    button.setAttribute('data-index', index);
+    if (index === vizPos) {
+      button.classList.add('selected');
+    }
+    
+    button.addEventListener('click', function() {
+      // Update visualization selection
+      vizPos = index;
+      setVisualization(viz);
+      localStorage.setItem('visualization', vizPos);
+      
+      // Update UI
+      updateVisualizationSelection();
+      // Don't close modal - let user continue exploring
+    });
+    
+    visualizationOptions.appendChild(button);
+  });
+  
+  // Open modal
+  function openSettings() {
+    settingsModal.classList.add('open');
+    settingsClose.focus();
+  }
+  
+  // Close modal
+  function closeSettings() {
+    settingsModal.classList.remove('open');
+    settingsGear.focus();
+  }
+  
+  // Update theme selection UI
+  function updateThemeSelection() {
+    var themeButtons = themeOptions.querySelectorAll('.option-button');
+    themeButtons.forEach(function(button, index) {
+      if (index === pos) {
+        button.classList.add('selected');
+      } else {
+        button.classList.remove('selected');
+      }
+    });
+  }
+  
+  // Update visualization selection UI
+  function updateVisualizationSelection() {
+    var vizButtons = visualizationOptions.querySelectorAll('.option-button');
+    vizButtons.forEach(function(button, index) {
+      if (index === vizPos) {
+        button.classList.add('selected');
+      } else {
+        button.classList.remove('selected');
+      }
+    });
+  }
+  
+  // Set theme function
+  function setTheme(themeName) {
+    // Remove all theme classes
+    themes.forEach(function(theme) {
+      document.body.classList.remove(theme);
+    });
+    document.body.classList.add(themeName);
+  }
+  
+  // Event listeners
+  settingsGear.addEventListener('click', openSettings);
+  settingsClose.addEventListener('click', closeSettings);
+  
+  // Close modal when clicking outside
+  settingsModal.addEventListener('click', function(e) {
+    if (e.target === settingsModal) {
+      closeSettings();
+    }
+  });
+  
+  // Close modal with Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && settingsModal.classList.contains('open')) {
+      closeSettings();
+    }
+  });
+}
+
+// Initialize settings when page loads
+initializeSettings();
+
+// Add visibility change listener after everything is initialized
+if (!(typeof document.addEventListener === 'undefined' || hidden === undefined)) {
+  document.addEventListener(visibilityChange, handleVisibilityChange, false);
+}
+
+console.log('Smpl New Tab: Created with <3 by Kyle Chadha @kylechadha');
