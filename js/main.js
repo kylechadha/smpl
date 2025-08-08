@@ -9,7 +9,7 @@ var visualizations = [
   'dots',
   'smooth'
 ];
-var vizPos = parseInt(localStorage.getItem('visualization')) || 0;
+var vizPos = parseInt(localStorage.getItem('visualization')) || 1;
 document.body.classList.remove('hidden');
 document.body.classList.add(themes[pos]);
 // Restore page load animation for both clock and dateTime
