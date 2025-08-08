@@ -4,8 +4,8 @@
   "description": "A minimalist new tab page Chrome extension",
   "private": true,
   "scripts": {
-    "dev": "live-server --port=8000 --open=simple.html",
-    "build": "rm -f extension.zip && zip -r extension.zip manifest.json simple.html popup.html css/ js/ -x '*.DS_Store'"
+    "dev": "live-server --port=8000 --open=smpl.html",
+    "build": "rm -f extension.zip && zip -r extension.zip manifest.json smpl.html popup.html css/ js/ -x '*.DS_Store'"
   },
   "devDependencies": {
     "@playwright/test": "^1.54.2",
@@ -13,7 +13,7 @@
   },
   "files": [
     "manifest.json",
-    "simple.html",
+    "smpl.html",
     "popup.html",
     "css/",
     "js/"

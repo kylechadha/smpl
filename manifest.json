@@ -4,7 +4,7 @@
   "description": "A minimalist new tab page.",
   "homepage_url": "http://kylechadha.com",
   "chrome_url_overrides" : {
-    "newtab": "simple.html"
+    "newtab": "smpl.html"
   },
   "permissions": ["activeTab", "storage"],
   "action": {
