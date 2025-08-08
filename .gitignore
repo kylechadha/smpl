@@ -5,4 +5,3 @@ node_modules/
 extension.zip
 package-lock.json
 screenshot.js
-*.png
