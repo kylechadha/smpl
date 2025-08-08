@@ -6,6 +6,7 @@ A minimalist Chrome browser extension that replaces your new tab page with a cle
 
 - **4 Unique Visualizations**: Multiple clock styles and visual effects (up/down arrow keys)
 - **11 Color Themes**: Navigate themes with left/right arrow keys  
+- **Settings Modal**: Interactive settings interface with visual previews (press 'S' or click gear icon)
 - **Dynamic Text Sizing**: Automatically balances time and date text for optimal visual weight
 - **Zero Dependencies**: Pure vanilla JavaScript with native APIs
 - **Responsive Design**: Adapts to all screen sizes from mobile to ultrawide monitors

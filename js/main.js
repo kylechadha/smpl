@@ -1,5 +1,5 @@
 // Themes.
-var themes = ['sky-blue', 'biscay', 'tangerine', 'gin', 'slate', 'charcoal', 'frost'];
+var themes = ['biscay', 'sky-blue', 'tangerine', 'gin', 'slate', 'charcoal', 'frost'];
 var pos = parseInt(localStorage.getItem('theme')) || 0;
 
 // Visualizations.
