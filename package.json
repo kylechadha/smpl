@@ -1,0 +1,21 @@
+{
+  "name": "smpl-new-tab",
+  "version": "2.0.0",
+  "description": "A minimalist new tab page Chrome extension",
+  "private": true,
+  "scripts": {
+    "dev": "live-server --port=8000 --open=smpl.html",
+    "build": "rm -f extension.zip && zip -r extension.zip manifest.json smpl.html popup.html css/ js/ -x '*.DS_Store'"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.54.2",
+    "live-server": "^1.2.2"
+  },
+  "files": [
+    "manifest.json",
+    "smpl.html",
+    "popup.html",
+    "css/",
+    "js/"
+  ]
+}

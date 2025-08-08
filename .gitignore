@@ -1,0 +1,7 @@
+CLAUDE.md
+.DS_Store
+*.log
+node_modules/
+extension.zip
+package-lock.json
+screenshot.js
