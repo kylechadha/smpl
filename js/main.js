@@ -1,6 +1,29 @@
+// Storage wrapper functions for Chrome Storage API with localStorage fallback
+function getStorageValue(key, callback) {
+  if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.sync) {
+    chrome.storage.sync.get([key], function(result) {
+      callback(result[key]);
+    });
+  } else {
+    // Fallback to localStorage
+    callback(localStorage.getItem(key));
+  }
+}
+
+function setStorageValue(key, value) {
+  if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.sync) {
+    var storageObj = {};
+    storageObj[key] = value;
+    chrome.storage.sync.set(storageObj);
+  } else {
+    // Fallback to localStorage
+    localStorage.setItem(key, value);
+  }
+}
+
 // Themes.
 var themes = ['biscay', 'sky-blue', 'tangerine', 'gin', 'slate', 'charcoal', 'frost'];
-var pos = parseInt(localStorage.getItem('theme')) || 0;
+var pos = 0;
 
 // Visualizations.
 var visualizations = [
@@ -9,9 +32,29 @@ var visualizations = [
   'dots',
   'smooth'
 ];
-var vizPos = parseInt(localStorage.getItem('visualization')) || 1;
-document.body.classList.remove('hidden');
-document.body.classList.add(themes[pos]);
+var vizPos = 1;
+
+// Initialize storage values on load
+function initializeStorageValues() {
+  getStorageValue('theme', function(storedTheme) {
+    pos = parseInt(storedTheme) || 0;
+    document.body.classList.remove('hidden');
+    document.body.classList.add(themes[pos]);
+    
+    getStorageValue('visualization', function(storedViz) {
+      vizPos = parseInt(storedViz) || 1;
+      // Initialize visualization (without showing name on startup)
+      var clockElement = document.getElementById('clock');
+      clockElement.className = '';
+      clockElement.classList.add('viz-' + visualizations[vizPos]);
+      updateClockStructure(visualizations[vizPos]);
+    });
+  });
+}
+
+// Call initialization
+initializeStorageValues();
+
 // Restore page load animation for both clock and dateTime
 var clock = document.getElementById('clock');
 var dateTime = document.getElementById('dateTime');
@@ -22,12 +65,6 @@ setTimeout(function() {
   clock.style.opacity = 1;
   dateTime.style.opacity = 1;
 }, 100);
-
-// Initialize visualization (without showing name on startup)
-var clockElement = document.getElementById('clock');
-clockElement.className = '';
-clockElement.classList.add('viz-' + visualizations[vizPos]);
-updateClockStructure(visualizations[vizPos]);
 
 document.onkeydown = function(event) {
   if (event.keyCode !== 37 && event.keyCode !== 39 && event.keyCode !== 38 && event.keyCode !== 40) {
@@ -49,7 +86,7 @@ document.onkeydown = function(event) {
     }
     document.body.classList.add(themes[pos]);
     document.body.classList.remove(current);
-    localStorage.setItem('theme', pos);
+    setStorageValue('theme', pos);
     
     // Update modal UI if open
     updateThemeSelectionInModal();
@@ -69,7 +106,7 @@ document.onkeydown = function(event) {
         break;
     }
     setVisualization(visualizations[vizPos]);
-    localStorage.setItem('visualization', vizPos);
+    setStorageValue('visualization', vizPos);
     
     // Update modal UI if open
     updateVisualizationSelectionInModal();
@@ -594,7 +631,7 @@ function initializeSettings() {
       // Update theme selection
       pos = index;
       setTheme(theme);
-      localStorage.setItem('theme', pos);
+      setStorageValue('theme', pos);
       
       // Update UI
       updateThemeSelection();
@@ -625,7 +662,7 @@ function initializeSettings() {
       // Update visualization selection
       vizPos = index;
       setVisualization(viz);
-      localStorage.setItem('visualization', vizPos);
+      setStorageValue('visualization', vizPos);
       
       // Update UI
       updateVisualizationSelection();
