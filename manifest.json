@@ -6,7 +6,7 @@
   "chrome_url_overrides" : {
     "newtab": "smpl.html"
   },
-  "permissions": ["activeTab", "storage"],
+  "permissions": ["storage"],
   "action": {
     "default_popup": "popup.html"
   },
